@@ -38,7 +38,6 @@ Recommended: soft piano, lo-fi love, or acoustic instrumental tracks.
 Edit the config variables at the top of `app.js`:
 
 ```js
-const PASSWORD = "10032023";
 const SENDER_NAME = "Ngân Giang";
 const RECEIVER_NAME = "Thanh Thảo";
 const DAYS_TOGETHER = 1072;
@@ -56,3 +55,4 @@ const DAYS_TOGETHER = 1072;
 ```
 
 ## 💕 Made with love by Ngân Giang
+
