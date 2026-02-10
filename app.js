@@ -331,196 +331,139 @@ function updateCounter() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   8. HEART BURST → BIG HEART → EXPLODE → "I LOVE U"
-   3-Phase Finale Celebration
+   8. FINALE — Heart Pulse → Burst → Scroll Up → Fold & Stamp
    ═══════════════════════════════════════════════════════ */
-
-// Pixel maps for "I LOVE U" — each letter is a 5×7 grid (col × row)
-const LETTER_MAPS = {
-  'I': [
-    [1, 1, 1],
-    [0, 1, 0],
-    [0, 1, 0],
-    [0, 1, 0],
-    [0, 1, 0],
-    [0, 1, 0],
-    [1, 1, 1],
-  ],
-  'L': [
-    [1, 0, 0, 0],
-    [1, 0, 0, 0],
-    [1, 0, 0, 0],
-    [1, 0, 0, 0],
-    [1, 0, 0, 0],
-    [1, 0, 0, 0],
-    [1, 1, 1, 1],
-  ],
-  'O': [
-    [0, 1, 1, 0],
-    [1, 0, 0, 1],
-    [1, 0, 0, 1],
-    [1, 0, 0, 1],
-    [1, 0, 0, 1],
-    [1, 0, 0, 1],
-    [0, 1, 1, 0],
-  ],
-  'V': [
-    [1, 0, 0, 0, 1],
-    [1, 0, 0, 0, 1],
-    [1, 0, 0, 0, 1],
-    [0, 1, 0, 1, 0],
-    [0, 1, 0, 1, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0],
-  ],
-  'E': [
-    [1, 1, 1, 1],
-    [1, 0, 0, 0],
-    [1, 0, 0, 0],
-    [1, 1, 1, 0],
-    [1, 0, 0, 0],
-    [1, 0, 0, 0],
-    [1, 1, 1, 1],
-  ],
-  'U': [
-    [1, 0, 0, 1],
-    [1, 0, 0, 1],
-    [1, 0, 0, 1],
-    [1, 0, 0, 1],
-    [1, 0, 0, 1],
-    [1, 0, 0, 1],
-    [0, 1, 1, 0],
-  ],
-  ' ': [
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-  ]
-};
-
 function triggerHeartBurst() {
   if (prefersReducedMotion) return;
 
-  // Phase 1: Big heart appears
+  // Phase 1: Big heart appears and pulses
   const bigHeart = document.createElement('div');
   bigHeart.className = 'big-heart-center';
   bigHeart.textContent = '❤️';
   heartBurst.appendChild(bigHeart);
 
-  // Phase 2: After big heart pulses, explode it
+  // Phase 2: After pulsing, explode into small hearts
   setTimeout(() => {
     bigHeart.classList.add('explode');
 
-    // Create explosion particles
-    const emojis = ['❤️', '💕', '💗', '✨', '💖', '🌸', '💫'];
-    for (let i = 0; i < 40; i++) {
+    const heartEmojis = ['❤️', '💕', '💗', '💖', '🌸', '💫'];
+    for (let i = 0; i < 50; i++) {
       const p = document.createElement('div');
       p.className = 'burst-particle';
-      p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      const angle = (Math.PI * 2 * i) / 40 + (Math.random() - 0.5) * 0.4;
-      const dist = 80 + Math.random() * 250;
+      p.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      const angle = (Math.PI * 2 * i) / 50 + (Math.random() - 0.5) * 0.5;
+      const dist = 60 + Math.random() * 300;
+      const dur = 1.5 + Math.random() * 1.5;
       p.style.cssText = `
         --tx:${Math.cos(angle) * dist}px;
         --ty:${Math.sin(angle) * dist}px;
-        --scale:${0.4 + Math.random() * 0.8};
+        --scale:${0.3 + Math.random() * 1};
         --rot:${(Math.random() - 0.5) * 720}deg;
         left:50%; top:50%;
-        font-size:${0.6 + Math.random() * 1}rem;
-        animation: burstOut ${1.2 + Math.random() * 0.8}s ease-out forwards;
-        animation-delay: ${Math.random() * 0.2}s;
+        font-size:${0.5 + Math.random() * 1.2}rem;
+        animation: burstOut ${dur}s ease-out forwards;
+        animation-delay: ${Math.random() * 0.3}s;
       `;
       heartBurst.appendChild(p);
-      setTimeout(() => p.remove(), 3000);
+      setTimeout(() => p.remove(), (dur + 0.3) * 1000);
     }
 
-    // Phase 3: After explosion, spawn "I LOVE U" hearts
+    // Remove big heart
+    setTimeout(() => bigHeart.remove(), 600);
+
+    // Phase 3: After hearts fade (wait ~3s), scroll letter to top & fold
     setTimeout(() => {
-      bigHeart.remove();
-      spawnILoveU();
-    }, 800);
-  }, 1800);
+      heartBurst.innerHTML = ''; // Clean up
+      scrollAndFoldLetter();
+    }, 3500);
+
+  }, 2000); // 2s of pulsing before exploding
 }
 
-function spawnILoveU() {
-  const text = "I LOVE U";
-  const cellSize = Math.min(window.innerWidth / 40, 16); // responsive cell size
-  const gap = cellSize * 0.3;
+/**
+ * Smoothly scrolls the letter scene back to the top,
+ * then folds the letter and applies a keepsake stamp.
+ */
+function scrollAndFoldLetter() {
+  // Step 1: Smooth scroll back to top
+  const scrollDuration = 3000; // 3 seconds
+  const startScroll = letterScene.scrollTop;
+  const startTime = performance.now();
 
-  // Calculate total width of all letters
-  let totalCols = 0;
-  for (const ch of text) {
-    const map = LETTER_MAPS[ch];
-    if (map) totalCols += map[0].length + 1; // +1 for spacing between letters
-  }
-  totalCols -= 1; // remove trailing space
+  function scrollStep(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / scrollDuration, 1);
+    // Ease-in-out curve
+    const eased = progress < 0.5
+      ? 2 * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 
-  const startX = (window.innerWidth - totalCols * (cellSize + gap)) / 2;
-  const startY = (window.innerHeight - 7 * (cellSize + gap)) / 2;
+    letterScene.scrollTop = startScroll * (1 - eased);
 
-  let colOffset = 0;
-  const hearts = [];
-  const heartEmojis = ['❤️', '💗', '💖', '💕', '♥️'];
-
-  for (const ch of text) {
-    const map = LETTER_MAPS[ch];
-    if (!map) continue;
-
-    for (let row = 0; row < map.length; row++) {
-      for (let col = 0; col < map[row].length; col++) {
-        if (map[row][col] === 1) {
-          const targetX = startX + (colOffset + col) * (cellSize + gap);
-          const targetY = startY + row * (cellSize + gap);
-
-          // Create heart particle
-          const h = document.createElement('div');
-          h.className = 'iloveu-heart';
-          h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-
-          // Start from random position around center
-          const fromX = window.innerWidth / 2 + (Math.random() - 0.5) * 300;
-          const fromY = window.innerHeight / 2 + (Math.random() - 0.5) * 300;
-
-          h.style.cssText = `
-            left: ${fromX}px;
-            top: ${fromY}px;
-            font-size: ${cellSize}px;
-            --target-x: ${targetX}px;
-            --target-y: ${targetY}px;
-            animation-delay: ${0.3 + Math.random() * 1.2}s;
-          `;
-
-          heartBurst.appendChild(h);
-          hearts.push(h);
-        }
-      }
+    if (progress < 1) {
+      requestAnimationFrame(scrollStep);
+    } else {
+      // Step 2: After scroll completes, fold the letter
+      setTimeout(() => foldLetter(), 800);
     }
-    colOffset += map[0].length + 1;
   }
 
-  // Add a gentle glow text behind the hearts
+  requestAnimationFrame(scrollStep);
+}
+
+/**
+ * Folds the letter paper with a closing animation
+ * and stamps it with a keepsake seal.
+ */
+function foldLetter() {
+  const paper = $('letter-paper');
+  const container = $('letter-container');
+  if (!paper || !container) return;
+
+  // Add folding class
+  container.classList.add('folding');
+
+  // After fold animation completes, add the keepsake stamp
   setTimeout(() => {
-    const glowText = document.createElement('div');
-    glowText.className = 'iloveu-glow-text';
-    glowText.textContent = 'I LOVE U';
-    heartBurst.appendChild(glowText);
+    // Create keepsake stamp overlay
+    const stamp = document.createElement('div');
+    stamp.className = 'keepsake-stamp';
+    stamp.innerHTML = `
+      <div class="stamp-border">
+        <div class="stamp-inner">
+          <div class="stamp-heart">❤️</div>
+          <div class="stamp-text-main">KỶ NIỆM</div>
+          <div class="stamp-text-sub">Chúng Mình</div>
+          <div class="stamp-date">10 • 03 • 2023</div>
+          <div class="stamp-text-bottom">mãi bên nhau ∞</div>
+        </div>
+      </div>
+    `;
+    container.appendChild(stamp);
 
-    // Add sparkle rain
-    for (let i = 0; i < 20; i++) {
-      const sparkle = document.createElement('div');
-      sparkle.className = 'finale-sparkle';
-      sparkle.textContent = '✨';
-      sparkle.style.cssText = `
-        left: ${Math.random() * 100}%;
-        animation-delay: ${Math.random() * 3}s;
-        font-size: ${0.5 + Math.random() * 0.8}rem;
-      `;
-      heartBurst.appendChild(sparkle);
-    }
-  }, 2500);
+    // Animate stamp in
+    requestAnimationFrame(() => {
+      stamp.classList.add('stamped');
+    });
+
+    // Add a gentle sparkle around the stamp
+    setTimeout(() => {
+      for (let i = 0; i < 12; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'stamp-sparkle';
+        sparkle.textContent = '✨';
+        const angle = (Math.PI * 2 * i) / 12;
+        const r = 80 + Math.random() * 40;
+        sparkle.style.cssText = `
+          --sx: ${Math.cos(angle) * r}px;
+          --sy: ${Math.sin(angle) * r}px;
+          animation-delay: ${i * 0.1}s;
+        `;
+        stamp.appendChild(sparkle);
+      }
+    }, 600);
+
+  }, 1500); // wait for fold animation
 }
 
 /* ═══════════════════════════════════════════════════════

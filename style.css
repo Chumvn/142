@@ -1275,127 +1275,184 @@ body {
   }
 }
 
-/* Phase 3: Hearts forming "I LOVE U" */
-.iloveu-heart {
-  position: absolute;
-  opacity: 0;
-  animation: heartFlyToPosition 2s var(--transition-smooth) forwards;
-  filter: drop-shadow(0 0 4px rgba(192, 57, 43, 0.4));
-  z-index: 58;
+/* ═══ LETTER FOLDING & KEEPSAKE STAMP ═══ */
+
+/* Folding animation: letter shrinks and flattens */
+.letter-container.folding {
+  animation: letterFold 1.5s var(--transition-smooth) forwards;
 }
 
-@keyframes heartFlyToPosition {
+@keyframes letterFold {
   0% {
-    opacity: 0;
-    transform: scale(0) rotate(0deg);
+    transform: perspective(1000px) rotateX(0) scale(1);
+    opacity: 1;
   }
 
-  20% {
-    opacity: 1;
-    transform: scale(1.5) rotate(180deg);
-  }
-
-  60% {
-    opacity: 1;
-    transform: scale(0.8) rotate(350deg);
+  40% {
+    transform: perspective(800px) rotateX(3deg) scale(0.92);
+    opacity: 0.9;
   }
 
   100% {
+    transform: perspective(600px) rotateX(0deg) scale(0.75);
     opacity: 1;
-    left: var(--target-x);
-    top: var(--target-y);
-    transform: scale(1) rotate(0deg);
+    max-height: 300px;
   }
 }
 
-/* Pulsing glow on settled hearts */
-.iloveu-heart::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 50%;
-  animation: heartGlowPulse 2s ease-in-out infinite;
-  animation-delay: inherit;
+.letter-container.folding .letter-paper {
+  max-height: 280px;
+  overflow: hidden;
+  transition: max-height 1.5s var(--transition-smooth);
 }
 
-@keyframes heartGlowPulse {
+.letter-container.folding .letter-paper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to top, var(--cream-dark) 0%, transparent 100%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ── Keepsake Stamp ── */
+.keepsake-stamp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(3) rotate(-15deg);
+  opacity: 0;
+  z-index: 20;
+  pointer-events: none;
+  transition: all .6s var(--transition-bounce);
+}
+
+.keepsake-stamp.stamped {
+  transform: translate(-50%, -50%) scale(1) rotate(-8deg);
+  opacity: 1;
+}
+
+.stamp-border {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 3px solid var(--wine);
+  padding: 8px;
+  position: relative;
+  background: rgba(253, 245, 230, 0.85);
+  box-shadow:
+    0 8px 32px rgba(74, 28, 34, 0.3),
+    inset 0 0 20px rgba(201, 169, 110, 0.1);
+}
+
+/* Dotted inner border */
+.stamp-border::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 2px dashed var(--wine-light);
+}
+
+/* Outer ring decoration */
+.stamp-border::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(114, 47, 55, 0.3);
+}
+
+.stamp-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
+}
+
+.stamp-heart {
+  font-size: 1.8rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(192, 57, 43, 0.4));
+  animation: stampHeartPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes stampHeartPulse {
 
   0%,
   100% {
-    filter: brightness(1);
+    transform: scale(1);
   }
 
   50% {
-    filter: brightness(1.3);
+    transform: scale(1.12);
   }
 }
 
-/* Glow text behind hearts */
-.iloveu-glow-text {
+.stamp-text-main {
+  font-family: var(--font-hand);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--wine);
+  letter-spacing: 0.15em;
+  line-height: 1.1;
+}
+
+.stamp-text-sub {
+  font-family: var(--font-hand);
+  font-size: 0.9rem;
+  color: var(--wine-light);
+  font-weight: 400;
+}
+
+.stamp-date {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+
+.stamp-text-bottom {
+  font-family: var(--font-hand);
+  font-size: 0.75rem;
+  color: var(--text-body);
+  font-style: italic;
+  margin-top: 1px;
+}
+
+/* Sparkle particles around stamp */
+.stamp-sparkle {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--font-hand);
-  font-size: clamp(2rem, 8vw, 4rem);
-  font-weight: 700;
-  color: transparent;
-  background: linear-gradient(135deg, var(--gold-light), #f0a0a8, var(--gold));
-  -webkit-background-clip: text;
-  background-clip: text;
-  text-shadow: none;
+  font-size: 0.8rem;
   opacity: 0;
-  animation: glowTextAppear 1.5s ease-out forwards;
-  z-index: 56;
-  letter-spacing: 0.15em;
-  white-space: nowrap;
-  filter: drop-shadow(0 0 20px rgba(201, 169, 110, 0.5));
+  animation: stampSparkleOut 1.5s var(--transition-smooth) forwards;
 }
 
-@keyframes glowTextAppear {
+@keyframes stampSparkleOut {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.5);
-    filter: blur(10px);
+    transform: translate(0, 0) scale(0);
   }
 
-  60% {
-    opacity: .3;
-  }
-
-  100% {
-    opacity: .25;
-    transform: translate(-50%, -50%) scale(1);
-    filter: blur(2px) drop-shadow(0 0 30px rgba(201, 169, 110, 0.5));
-  }
-}
-
-/* Finale sparkle rain */
-.finale-sparkle {
-  position: absolute;
-  top: -20px;
-  opacity: 0;
-  animation: finaleSparkleRain 4s linear infinite;
-  z-index: 57;
-}
-
-@keyframes finaleSparkleRain {
-  0% {
-    opacity: 0;
-    transform: translateY(0) rotate(0deg);
-  }
-
-  10% {
-    opacity: .8;
-  }
-
-  50% {
-    opacity: .5;
+  40% {
+    opacity: 1;
+    transform: translate(calc(var(--sx) * 0.5), calc(var(--sy) * 0.5)) scale(1.2);
   }
 
   100% {
     opacity: 0;
-    transform: translateY(100vh) rotate(360deg);
+    transform: translate(var(--sx), var(--sy)) scale(0.5);
   }
 }
 
