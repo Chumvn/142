@@ -48,9 +48,6 @@ const liveCounter = $('live-counter');
 const counterNumber = $('counter-number');
 const letterContainer = $('letter-container');
 const touchHeartsLayer = $('touch-hearts-layer');
-const postFoldNav = $('post-fold-nav');
-const btnReread = $('btn-reread');
-const btnScratch = $('btn-scratch');
 
 // ── State ───────────────────────────────────────────
 let isMuted = false;
@@ -557,16 +554,11 @@ function foldLetter() {
       }
     }, 600);
 
-    // Show navigation buttons after sparkles
+    // Make the folded letter clickable to re-read
     setTimeout(() => {
-      postFoldNav.classList.add('visible');
-      postFoldNav.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      container.style.cursor = 'pointer';
+      container.onclick = () => unfoldLetter();
     }, 1800);
-
-    // Pre-initialize scratch card (hidden - shown when button clicked)
-    setTimeout(() => {
-      try { initScratchCard(); } catch (e) { /* canvas may not be ready */ }
-    }, 2500);
 
   }, 1500); // wait for fold animation
 }
@@ -579,10 +571,9 @@ function unfoldLetter() {
   const container = $('letter-container');
   const stamp = container.querySelector('.keepsake-stamp');
 
-  // Hide nav buttons
-  postFoldNav.classList.remove('visible');
-  // Hide scratch card section
-  scratchCardSection.classList.remove('visible');
+  // Remove click handler
+  container.style.cursor = '';
+  container.onclick = null;
 
   if (stamp) {
     stamp.style.transition = 'opacity .5s ease, transform .5s ease';
@@ -592,7 +583,6 @@ function unfoldLetter() {
   }
 
   setTimeout(() => {
-    // Remove folding class to unfold
     container.classList.remove('folding');
     container.style.animation = 'letterUnfold .8s var(--transition-smooth) forwards';
 
@@ -602,41 +592,9 @@ function unfoldLetter() {
     // Clean up animation after it completes
     setTimeout(() => {
       container.style.animation = '';
-
-      // After user has time to re-read, show nav again at bottom
-      // We listen for scroll to bottom to show the buttons
-      showNavOnScrollEnd();
     }, 900);
   }, stamp ? 500 : 0);
 }
-
-/**
- * Shows post-fold-nav when user scrolls near the bottom of the letter.
- * Auto-removes itself once triggered.
- */
-function showNavOnScrollEnd() {
-  function onScroll() {
-    const scrollBottom = letterScene.scrollTop + letterScene.clientHeight;
-    const totalHeight = letterScene.scrollHeight;
-    if (scrollBottom >= totalHeight - 100) {
-      postFoldNav.classList.add('visible');
-      postFoldNav.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      letterScene.removeEventListener('scroll', onScroll);
-    }
-  }
-  letterScene.addEventListener('scroll', onScroll);
-}
-
-// Button: Re-read the letter
-btnReread.addEventListener('click', () => unfoldLetter());
-
-// Button: Go to scratch card
-btnScratch.addEventListener('click', () => {
-  scratchCardSection.classList.add('visible');
-  setTimeout(() => {
-    scratchCardSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, 100);
-});
 
 /* ═══════════════════════════════════════════════════════
    9. 3D TILT EFFECT (desktop only — mouse follows paper)
@@ -716,108 +674,3 @@ function spawnTouchHearts(x, y) {
   }
 }
 
-/* ═══════════════════════════════════════════════════════
-   12. SCRATCH CARD (Canvas scratch to reveal message)
-   ═══════════════════════════════════════════════════════ */
-function initScratchCard() {
-  scratchCardSection.classList.add('visible');
-
-  const canvas = $('scratch-canvas');
-  const ctx = canvas.getContext('2d');
-  const w = canvas.width;
-  const h = canvas.height;
-
-  // Draw the scratch overlay
-  // Gold gradient background
-  const grad = ctx.createLinearGradient(0, 0, w, h);
-  grad.addColorStop(0, '#C9A96E');
-  grad.addColorStop(0.5, '#E8D5A8');
-  grad.addColorStop(1, '#C9A96E');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, w, h);
-
-  // Decorative pattern
-  ctx.globalAlpha = 0.15;
-  for (let i = 0; i < 40; i++) {
-    ctx.fillStyle = i % 2 === 0 ? '#fff' : '#B8963E';
-    ctx.beginPath();
-    ctx.arc(Math.random() * w, Math.random() * h, 2 + Math.random() * 8, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  ctx.globalAlpha = 1;
-
-  // Text on scratch layer
-  ctx.fillStyle = '#722F37';
-  ctx.font = 'bold 22px "Dancing Script", cursive';
-  ctx.textAlign = 'center';
-  ctx.fillText('✨ Cào nhẹ để mở ✨', w / 2, h / 2 - 10);
-  ctx.font = '16px "Montserrat", sans-serif';
-  ctx.fillText('Bí mật bên dưới...', w / 2, h / 2 + 20);
-
-  // Small hearts decoration on scratch layer
-  ctx.font = '18px serif';
-  const deco = ['❤️', '💗', '✨', '💕'];
-  for (let i = 0; i < 8; i++) {
-    ctx.fillText(deco[i % deco.length], 30 + Math.random() * (w - 60), 30 + Math.random() * (h - 60));
-  }
-
-  // Scratch logic
-  let isScratching = false;
-  let scratchRevealed = false;
-
-  function scratch(px, py) {
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(px, py, 22, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalCompositeOperation = 'source-over';
-    checkScratchProgress();
-  }
-
-  function getPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = w / rect.width;
-    const scaleY = h / rect.height;
-    if (e.touches) {
-      return { x: (e.touches[0].clientX - rect.left) * scaleX, y: (e.touches[0].clientY - rect.top) * scaleY };
-    }
-    return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
-  }
-
-  function checkScratchProgress() {
-    if (scratchRevealed) return;
-    const imageData = ctx.getImageData(0, 0, w, h);
-    let clear = 0;
-    for (let i = 3; i < imageData.data.length; i += 4) {
-      if (imageData.data[i] === 0) clear++;
-    }
-    const progress = clear / (w * h);
-    if (progress > 0.4) {
-      scratchRevealed = true;
-      revealScratchCard(canvas);
-    }
-  }
-
-  // Mouse events
-  canvas.addEventListener('mousedown', (e) => { isScratching = true; const p = getPos(e); scratch(p.x, p.y); });
-  canvas.addEventListener('mousemove', (e) => { if (!isScratching) return; const p = getPos(e); scratch(p.x, p.y); });
-  canvas.addEventListener('mouseup', () => isScratching = false);
-  canvas.addEventListener('mouseleave', () => isScratching = false);
-
-  // Touch events
-  canvas.addEventListener('touchstart', (e) => { e.preventDefault(); isScratching = true; const p = getPos(e); scratch(p.x, p.y); }, { passive: false });
-  canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if (!isScratching) return; const p = getPos(e); scratch(p.x, p.y); }, { passive: false });
-  canvas.addEventListener('touchend', () => isScratching = false);
-}
-
-function revealScratchCard(canvas) {
-  // Fade out the canvas
-  canvas.style.transition = 'opacity 0.8s ease';
-  canvas.style.opacity = '0';
-  setTimeout(() => {
-    canvas.style.display = 'none';
-    // Add reveal animation
-    const reveal = $('scratch-reveal');
-    reveal.classList.add('revealed');
-  }, 800);
-}
