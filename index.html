@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Một bức thư tình gửi đến Thanh Thảo — từ Ngân Giang, với tất cả yêu thương." />
+  <meta name="theme-color" content="#722F37" />
+  <title>Gửi Thanh Thảo ❤️</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 1 — PASSWORD
+       ══════════════════════════════════════════════ -->
+  <section id="password-screen" class="screen active">
+    <!-- Floating hearts background -->
+    <div class="hearts-bg" aria-hidden="true">
+      <span class="heart">❤</span>
+      <span class="heart">💕</span>
+      <span class="heart">❤</span>
+      <span class="heart">💗</span>
+      <span class="heart">❤</span>
+      <span class="heart">💕</span>
+      <span class="heart">❤</span>
+      <span class="heart">💗</span>
+      <span class="heart">❤</span>
+      <span class="heart">💕</span>
+      <span class="heart">❤</span>
+      <span class="heart">💗</span>
+      <span class="heart">❤</span>
+      <span class="heart">💕</span>
+      <span class="heart">❤</span>
+    </div>
+
+    <div class="password-card">
+      <h1 class="password-title">Một chút riêng tư cho Thanh Thảo ❤️</h1>
+      <p class="password-subtitle">Nhập ngày đặc biệt của chúng ta để mở thư</p>
+
+      <form id="password-form" autocomplete="off">
+        <div class="input-group">
+          <input type="password" id="password-input" placeholder="ddmmyyyy" inputmode="numeric" maxlength="8"
+            aria-label="Nhập mật khẩu" autofocus />
+        </div>
+        <p id="error-msg" class="error-msg" aria-live="polite"></p>
+        <button type="submit" id="submit-btn" class="btn-open">Mở thư</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 2 — ENVELOPE (Redesigned 3D)
+       ══════════════════════════════════════════════ -->
+  <section id="envelope-scene" class="screen">
+    <div class="envelope-wrapper">
+      <p class="envelope-hint">Nhấn vào phong bì để mở ❤️</p>
+      <div id="envelope" class="envelope" role="button" tabindex="0" aria-label="Mở phong bì">
+        <!-- Back of envelope -->
+        <div class="env-back"></div>
+        <!-- Letter inside -->
+        <div class="env-letter" id="env-letter">
+          <span class="env-letter-text">Gửi Thanh Thảo ❤️</span>
+          <div class="env-letter-lines">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <!-- Left fold -->
+        <div class="env-fold-left"></div>
+        <!-- Right fold -->
+        <div class="env-fold-right"></div>
+        <!-- Bottom flap -->
+        <div class="env-flap-bottom"></div>
+        <!-- Top flap (opens) -->
+        <div class="env-flap-top" id="env-flap-top">
+          <!-- Wax seal on the flap -->
+          <div class="wax-seal" id="wax-seal">
+            <div class="wax-seal-inner">❤</div>
+            <div class="seal-crack seal-crack-1"></div>
+            <div class="seal-crack seal-crack-2"></div>
+            <div class="seal-crack seal-crack-3"></div>
+            <div class="seal-crack seal-crack-4"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 3 — LETTER
+       ══════════════════════════════════════════════ -->
+  <section id="letter-scene" class="screen">
+    <!-- Petal falling container -->
+    <div class="petals-container" id="petals-container" aria-hidden="true"></div>
+
+    <!-- Vignette glow around letter -->
+    <div class="vignette-glow" aria-hidden="true"></div>
+
+    <!-- Sound toggle -->
+    <button id="sound-toggle" class="sound-toggle" aria-label="Bật/tắt nhạc" title="Bật/tắt nhạc">
+      <span class="sound-icon">🔊</span>
+    </button>
+
+    <div class="letter-container" id="letter-container">
+      <div class="letter-paper" id="letter-paper">
+        <h2 class="letter-title" id="letter-title"></h2>
+        <div class="letter-body" id="letter-body"></div>
+        <div class="letter-signature" id="letter-signature"></div>
+        <div class="letter-ps" id="letter-ps"></div>
+
+        <!-- Live counter at end of letter -->
+        <div class="live-counter" id="live-counter">
+          <div class="counter-label">Đã bên nhau</div>
+          <div class="counter-number" id="counter-number"></div>
+          <div class="counter-sublabel">ngày... và còn mãi ❤️</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heart burst container (appears after letter finishes) -->
+    <div class="heart-burst-container" id="heart-burst" aria-hidden="true"></div>
+  </section>
+
+
+  <!-- Background Music -->
+  <audio id="bg-music" preload="auto" loop>
+    <source src="assets/music.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
