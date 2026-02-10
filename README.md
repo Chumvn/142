@@ -1,16 +1,19 @@
-# 💌 Valentine Love Letter — Gửi Thanh Thảo
+# 💌 Valentine Love Letter
 
-A romantic digital love letter webapp, designed to be warm, sincere, and emotional.
+A romantic digital love letter webapp with beautiful animations and effects.
 
 ## ✨ Features
 
 - 🔒 Password-protected entrance
-- ✉️ Envelope open animation
+- ✉️ Wax seal envelope animation
 - ✍️ Handwriting typewriter effect with blinking cursor
-- 🎵 Background music with fade-in & toggle
+- 🌸 Falling petals & parallax scroll
+- 💖 Heart burst finale animation
+- 🎵 Background music playlist (auto-advance)
+- 🎯 Hidden gestures: 2-tap next song, 3-tap toggle mute
+- ✨ Highlighted keywords with color shimmer
 - 📱 Mobile-friendly & responsive
 - ♿ Supports `prefers-reduced-motion`
-- 🎨 Wine red, warm cream, soft gold palette
 
 ## 🚀 Deploy to GitHub Pages
 
@@ -21,38 +24,41 @@ A romantic digital love letter webapp, designed to be warm, sincere, and emotion
    style.css
    app.js
    assets/music.mp3
+   assets/music2.mp3
+   assets/music3.mp3
    README.md
    ```
 3. Go to **Settings → Pages**
 4. Set Source to **Deploy from a branch** → `main` → `/ (root)`
 5. Save — your site will be live at `https://<username>.github.io/<repo>/`
 
-## 🎵 Adding Music
-
-Place your romantic piano instrumental as `assets/music.mp3`.
-
-Recommended: soft piano, lo-fi love, or acoustic instrumental tracks.
-
 ## 🔧 Customization
 
 Edit the config variables at the top of `app.js`:
 
 ```js
-const SENDER_NAME = "Ngân Giang";
-const RECEIVER_NAME = "Thanh Thảo";
-const DAYS_TOGETHER = 1072;
+const PASSWORD = "********";
+const SENDER_NAME = "Your Name";
+const RECEIVER_NAME = "Their Name";
+const DAYS_TOGETHER = 0;
+const START_DATE = new Date(2023, 0, 1);
 ```
+
+## 🎵 Music
+
+Place your music files in `assets/` folder and update the playlist in `app.js`.
 
 ## 📁 Project Structure
 
 ```
 ├── index.html      # Main HTML structure
 ├── style.css       # All styling & animations
-├── app.js          # Password, envelope, handwriting, music logic
+├── app.js          # App logic & animations
 ├── assets/
-│   └── music.mp3   # Background music (you provide this)
-└── README.md       # This file
+│   ├── music.mp3
+│   ├── music2.mp3
+│   └── music3.mp3
+└── README.md
 ```
 
-## 💕 Made with love by Ngân Giang
-
+## 💕 Made with love

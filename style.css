@@ -1094,6 +1094,32 @@ body {
   font-weight: 700;
 }
 
+/* Highlighted keywords with color shimmer */
+.hl {
+  animation: hlShimmer 4s ease-in-out infinite;
+  font-weight: 600;
+}
+
+.hl .char {
+  animation: inherit;
+}
+
+@keyframes hlShimmer {
+
+  0%,
+  100% {
+    color: #c0392b;
+  }
+
+  33% {
+    color: #e8a87c;
+  }
+
+  66% {
+    color: var(--gold);
+  }
+}
+
 .letter-ps {
   font-family: var(--font-hand);
   font-size: 1.05rem;

@@ -13,21 +13,19 @@ const START_DATE = new Date(2023, 2, 10); // March 10, 2023
 
 // ── Letter Content ──────────────────────────────────
 const daysSince = DAYS_TOGETHER;
-const LETTER_TITLE = `Gửi ${RECEIVER_NAME} — người mà anh yêu nhất ❤️`;
+const LETTER_TITLE = `Gửi ${RECEIVER_NAME} của anh ❤️`;
 const LETTER_PARAGRAPHS = [
-  `Em biết không, hôm nay anh ngồi lại, đếm từng ngày mình đã đi bên nhau — ${daysSince.toLocaleString()} ngày. Nghe thì dài, nhưng sao anh cảm giác như mới hôm qua thôi, lần đầu anh nắm tay em, tim đập nhanh đến mức quên cả thở.`,
-  `Anh không giỏi nói lời hoa mỹ, em biết mà. Nhưng có những điều anh giữ trong lòng rất lâu rồi, hôm nay anh muốn viết ra — bằng cả trái tim mình.`,
-  `Cảm ơn em vì mỗi buổi sáng em mở mắt là anh thấy cả thế giới bình yên. Cảm ơn vì những bữa cơm em nấu, dù đơn giản nhưng với anh, đó là mùi vị của hạnh phúc. Cảm ơn vì những đêm em lặng lẽ đắp chăn cho anh khi anh ngủ quên trước tivi.`,
-  `Em hay hỏi anh: "Anh có yêu em không?" — câu hỏi nghe đơn giản nhưng mỗi lần nghe, lòng anh lại nhói lên. Không phải vì anh không yêu, mà vì anh sợ — sợ rằng anh chưa đủ giỏi để em thấy được tình yêu ấy trong từng hành động hàng ngày.`,
-  `Anh yêu em, Thảo. Yêu theo cách mà nước mắt sẽ rơi nếu một ngày anh không còn được nghe tiếng em gọi tên. Yêu theo cách mà dù cả thế giới quay lưng, anh vẫn sẽ đứng đó — chờ em, giữ em, bảo vệ em.`,
-  `Có đôi khi mình cãi nhau, anh biết. Có đôi khi anh làm em buồn, em làm anh thất vọng. Nhưng em ơi, chính những lúc ấy anh lại càng biết rõ hơn: anh không thể thiếu em. Bởi vì người khiến mình đau nhất, cũng chính là người mình yêu nhất.`,
-  `Anh nhớ ngày mình về chung một nhà — 10 tháng 3, 2023. Ngày mà anh hứa với lòng mình: "Từ giờ trở đi, mình sẽ không để em phải cô đơn." Và hôm nay, ${daysSince.toLocaleString()} ngày sau, anh vẫn giữ lời hứa đó.`,
-  `Nếu cuộc đời này cho anh được chọn lại, anh vẫn chọn em — thêm một nghìn lần nữa. Không phải vì em hoàn hảo, mà vì em là "nhà" của anh. Em là nơi anh muốn trở về sau những ngày mệt mỏi, là người anh muốn nhìn thấy đầu tiên khi mở mắt, và là người cuối cùng anh muốn nói "chúc em ngủ ngon" mỗi đêm.`,
-  `Thảo ơi, anh không biết tương lai sẽ ra sao. Nhưng anh biết chắc một điều — dù mai sau thế nào, dù khó khăn mấy, anh vẫn sẽ ở đây, ngay bên em. Bởi vì anh đã tìm thấy cả vũ trụ trong đôi mắt em rồi, anh không cần tìm thêm ở đâu nữa.`
+  `Hôm nay, khi viết những dòng này, anh mới nhận ra rằng chúng ta đã đi cùng nhau <span class="hl">${daysSince.toLocaleString()} ngày</span> — tròn 2 năm 11 tháng kể từ ngày mình <span class="hl">về chung một nhà</span>.`,
+  `Thời gian không quá dài, nhưng đủ để anh hiểu rằng <span class="hl">hạnh phúc</span> không phải là những điều lớn lao. Chỉ là mỗi ngày được về nhà, thấy em ở đó, cùng nhau ăn cơm, cùng nhau nói những chuyện <span class="hl">rất bình thường</span>.`,
+  `Có những buổi tối mình ngồi cạnh nhau, chẳng nói gì nhiều, chỉ <span class="hl">lặng lẽ ở bên</span>. Nhưng chính những khoảnh khắc bình yên đó lại là điều anh <span class="hl">trân quý nhất</span>. Vì anh biết, không phải ai cũng may mắn có được một người để về nhà, một người để chia sẻ cả những điều nhỏ nhặt nhất trong ngày.`,
+  `<span class="hl">Cảm ơn em</span> vì đã luôn ở bên anh — những lúc vui, lúc mệt, và cả những ngày chẳng có gì đặc biệt. Cảm ơn em vì đã <span class="hl">chọn ở lại</span>, cùng anh đi tiếp chặng đường này. Cảm ơn em vì đã kiên nhẫn với anh, vì đã <span class="hl">yêu thương anh</span> theo cách của riêng em — nhẹ nhàng, ấm áp, và chân thành.`,
+  `Anh không hứa sẽ luôn hoàn hảo, nhưng anh hứa sẽ luôn <span class="hl">cố gắng trở thành người chồng tốt hơn</span> mỗi ngày. Vẫn là người nắm tay em khi cần, vẫn là người trở về bên em sau một ngày dài. Vẫn là người lắng nghe em, hiểu em, và luôn đặt em ở <span class="hl">vị trí quan trọng nhất</span> trong cuộc đời anh.`,
+  `Đôi khi anh tự hỏi, nếu cuộc đời này có kiếp sau, liệu mình có tìm thấy nhau không? Anh không biết câu trả lời, nhưng anh biết chắc một điều — kiếp này, <span class="hl">anh đã rất may mắn vì có em</span>.`,
+  `Nếu được chọn lại, anh vẫn sẽ <span class="hl">chọn gặp em, chọn cưới em</span>, và chọn cuộc sống này — <span class="hl">thêm một lần nữa</span>.`
 ];
-const LETTER_CLOSING = `Yêu em nhiều lắm, mãi mãi và mãi mãi.`;
+const LETTER_CLOSING = `Yêu em.`;
 const LETTER_SIGNATURE = SENDER_NAME;
-const LETTER_PS = `P/S: ${daysSince.toLocaleString()} ngày đã qua, nhưng đó chỉ là chương đầu tiên thôi. Phần đẹp nhất, mình sẽ cùng nhau viết tiếp — từng ngày, từng ngày một. 🌹`;
+const LETTER_PS = `P/S: ${daysSince.toLocaleString()} ngày chỉ là bắt đầu thôi, phần còn lại <span class="hl">mình viết tiếp cùng nhau</span> nhé.`;
 
 // ── DOM Elements ────────────────────────────────────
 const $ = (id) => document.getElementById(id);
@@ -43,16 +41,13 @@ const letterTitle = $('letter-title');
 const letterBody = $('letter-body');
 const letterSig = $('letter-signature');
 const letterPs = $('letter-ps');
-const soundToggle = $('sound-toggle');
 const bgMusic = $('bg-music');
-const musicNext = $('music-next');
 const petalsContainer = $('petals-container');
 const heartBurst = $('heart-burst');
 const liveCounter = $('live-counter');
 const counterNumber = $('counter-number');
 const letterContainer = $('letter-container');
 const touchHeartsLayer = $('touch-hearts-layer');
-const scratchCardSection = $('scratch-card-section');
 const postFoldNav = $('post-fold-nav');
 const btnReread = $('btn-reread');
 const btnScratch = $('btn-scratch');
@@ -179,20 +174,28 @@ function playNext() {
 // Auto-advance to next song when current ends
 bgMusic.addEventListener('ended', () => playNext());
 
-soundToggle.addEventListener('click', () => {
-  isMuted = !isMuted;
-  bgMusic.muted = isMuted;
-  soundToggle.classList.toggle('muted', isMuted);
-  soundToggle.querySelector('.sound-icon').textContent = isMuted ? '🔇' : '🔊';
-  if (!musicStarted && !isMuted) startMusic();
-});
+/* ═══════════════════════════════════════════════════════
+   HIDDEN TAP GESTURES (silent)
+   2 taps = next song | 4 taps = toggle mute
+   ═══════════════════════════════════════════════════════ */
+let tapCount = 0;
+let tapTimer = null;
+const TAP_WINDOW = 600;
 
-musicNext.addEventListener('click', () => {
-  if (!musicStarted) {
-    startMusic();
-    return;
-  }
-  playNext();
+letterScene.addEventListener('click', (e) => {
+  if (e.target.closest('button, canvas, a, .fold-nav-btn, input')) return;
+  tapCount++;
+  clearTimeout(tapTimer);
+  tapTimer = setTimeout(() => {
+    if (tapCount === 2) {
+      if (!musicStarted) { startMusic(); } else { playNext(); }
+    } else if (tapCount >= 3) {
+      isMuted = !isMuted;
+      bgMusic.muted = isMuted;
+      if (!musicStarted && !isMuted) startMusic();
+    }
+    tapCount = 0;
+  }, TAP_WINDOW);
 });
 
 /* ═══════════════════════════════════════════════════════
@@ -260,23 +263,66 @@ function animatePS() {
  * - Ink splash on each character (subtle)
  */
 function typewriteText(element, text, baseDelay, onComplete) {
+  // Parse text into segments: plain text and <span class="hl">...</span> blocks
+  const segments = [];
+  let remaining = text;
+  const tagRegex = /<span class="hl">(.*?)<\/span>/;
+  while (remaining.length > 0) {
+    const match = remaining.match(tagRegex);
+    if (match) {
+      if (match.index > 0) {
+        segments.push({ type: 'text', content: remaining.slice(0, match.index) });
+      }
+      segments.push({ type: 'hl', content: match[1] });
+      remaining = remaining.slice(match.index + match[0].length);
+    } else {
+      segments.push({ type: 'text', content: remaining });
+      remaining = '';
+    }
+  }
+
+  // Flatten to char array with highlight info
+  const chars = [];
+  for (const seg of segments) {
+    for (const ch of seg.content) {
+      chars.push({ char: ch, hl: seg.type === 'hl' });
+    }
+  }
+
   let index = 0;
   element.textContent = '';
   const cursor = document.createElement('span');
   cursor.className = 'letter-cursor';
   element.appendChild(cursor);
 
+  let currentHlSpan = null;
+
   function typeNext() {
-    if (index >= text.length) {
+    if (index >= chars.length) {
+      currentHlSpan = null;
       setTimeout(() => { if (cursor.parentNode) cursor.remove(); if (onComplete) onComplete(); }, 300);
       return;
     }
-    const char = text[index];
+    const { char, hl } = chars[index];
+
+    // Manage highlight spans
+    if (hl && !currentHlSpan) {
+      currentHlSpan = document.createElement('span');
+      currentHlSpan.className = 'hl';
+      element.insertBefore(currentHlSpan, cursor);
+    } else if (!hl && currentHlSpan) {
+      currentHlSpan = null;
+    }
+
     const span = document.createElement('span');
     span.className = 'char'; span.textContent = char;
-    element.insertBefore(span, cursor);
-    requestAnimationFrame(() => span.classList.add('visible'));
 
+    if (currentHlSpan) {
+      currentHlSpan.appendChild(span);
+    } else {
+      element.insertBefore(span, cursor);
+    }
+    requestAnimationFrame(() => span.classList.add('visible'));
 
     index++;
     let delay = baseDelay + (Math.random() * baseDelay * 0.8 - baseDelay * 0.4);
@@ -301,7 +347,7 @@ function showLetterInstantly() {
   letterTitle.textContent = LETTER_TITLE;
   LETTER_PARAGRAPHS.forEach(t => {
     const p = document.createElement('div');
-    p.className = 'paragraph'; p.style.opacity = '1'; p.textContent = t;
+    p.className = 'paragraph'; p.style.opacity = '1'; p.innerHTML = t;
     letterBody.appendChild(p);
   });
   const c = document.createElement('div');
