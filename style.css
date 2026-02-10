@@ -1177,7 +1177,7 @@ body {
   margin-top: .5rem;
 }
 
-/* Heart Burst */
+/* Heart Burst — 3 Phase Finale */
 .heart-burst-container {
   position: fixed;
   inset: 0;
@@ -1188,6 +1188,70 @@ body {
   justify-content: center;
 }
 
+/* Phase 1: Big Heart */
+.big-heart-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 6rem;
+  animation: bigHeartAppear 1.8s var(--transition-bounce) forwards;
+  filter: drop-shadow(0 0 30px rgba(192, 57, 43, 0.6));
+  z-index: 60;
+}
+
+.big-heart-center.explode {
+  animation: bigHeartExplode .5s ease-in forwards !important;
+}
+
+@keyframes bigHeartAppear {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+
+  30% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  70% {
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+
+  85% {
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes bigHeartExplode {
+  0% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 1;
+  }
+
+  40% {
+    transform: translate(-50%, -50%) scale(1.8);
+    opacity: .8;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+    filter: blur(10px) drop-shadow(0 0 60px rgba(192, 57, 43, 0.8));
+  }
+}
+
+/* Phase 2: Burst particles (reuse existing) */
 .burst-particle {
   position: absolute;
   font-size: 1.2rem;
@@ -1198,16 +1262,140 @@ body {
 @keyframes burstOut {
   0% {
     opacity: 1;
-    transform: translate(0, 0) scale(.3) rotate(0deg)
+    transform: translate(0, 0) scale(.3) rotate(0deg);
   }
 
   60% {
-    opacity: .8
+    opacity: .8;
   }
 
   100% {
     opacity: 0;
-    transform: translate(var(--tx), var(--ty)) scale(var(--scale)) rotate(var(--rot))
+    transform: translate(var(--tx), var(--ty)) scale(var(--scale)) rotate(var(--rot));
+  }
+}
+
+/* Phase 3: Hearts forming "I LOVE U" */
+.iloveu-heart {
+  position: absolute;
+  opacity: 0;
+  animation: heartFlyToPosition 2s var(--transition-smooth) forwards;
+  filter: drop-shadow(0 0 4px rgba(192, 57, 43, 0.4));
+  z-index: 58;
+}
+
+@keyframes heartFlyToPosition {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+
+  20% {
+    opacity: 1;
+    transform: scale(1.5) rotate(180deg);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(0.8) rotate(350deg);
+  }
+
+  100% {
+    opacity: 1;
+    left: var(--target-x);
+    top: var(--target-y);
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Pulsing glow on settled hearts */
+.iloveu-heart::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  animation: heartGlowPulse 2s ease-in-out infinite;
+  animation-delay: inherit;
+}
+
+@keyframes heartGlowPulse {
+
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.3);
+  }
+}
+
+/* Glow text behind hearts */
+.iloveu-glow-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-hand);
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-weight: 700;
+  color: transparent;
+  background: linear-gradient(135deg, var(--gold-light), #f0a0a8, var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: none;
+  opacity: 0;
+  animation: glowTextAppear 1.5s ease-out forwards;
+  z-index: 56;
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+  filter: drop-shadow(0 0 20px rgba(201, 169, 110, 0.5));
+}
+
+@keyframes glowTextAppear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+    filter: blur(10px);
+  }
+
+  60% {
+    opacity: .3;
+  }
+
+  100% {
+    opacity: .25;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(2px) drop-shadow(0 0 30px rgba(201, 169, 110, 0.5));
+  }
+}
+
+/* Finale sparkle rain */
+.finale-sparkle {
+  position: absolute;
+  top: -20px;
+  opacity: 0;
+  animation: finaleSparkleRain 4s linear infinite;
+  z-index: 57;
+}
+
+@keyframes finaleSparkleRain {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+  }
+
+  10% {
+    opacity: .8;
+  }
+
+  50% {
+    opacity: .5;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(360deg);
   }
 }
 

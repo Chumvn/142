@@ -331,36 +331,196 @@ function updateCounter() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   8. HEART BURST (celebration when letter finishes)
+   8. HEART BURST → BIG HEART → EXPLODE → "I LOVE U"
+   3-Phase Finale Celebration
    ═══════════════════════════════════════════════════════ */
+
+// Pixel maps for "I LOVE U" — each letter is a 5×7 grid (col × row)
+const LETTER_MAPS = {
+  'I': [
+    [1, 1, 1],
+    [0, 1, 0],
+    [0, 1, 0],
+    [0, 1, 0],
+    [0, 1, 0],
+    [0, 1, 0],
+    [1, 1, 1],
+  ],
+  'L': [
+    [1, 0, 0, 0],
+    [1, 0, 0, 0],
+    [1, 0, 0, 0],
+    [1, 0, 0, 0],
+    [1, 0, 0, 0],
+    [1, 0, 0, 0],
+    [1, 1, 1, 1],
+  ],
+  'O': [
+    [0, 1, 1, 0],
+    [1, 0, 0, 1],
+    [1, 0, 0, 1],
+    [1, 0, 0, 1],
+    [1, 0, 0, 1],
+    [1, 0, 0, 1],
+    [0, 1, 1, 0],
+  ],
+  'V': [
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0],
+  ],
+  'E': [
+    [1, 1, 1, 1],
+    [1, 0, 0, 0],
+    [1, 0, 0, 0],
+    [1, 1, 1, 0],
+    [1, 0, 0, 0],
+    [1, 0, 0, 0],
+    [1, 1, 1, 1],
+  ],
+  'U': [
+    [1, 0, 0, 1],
+    [1, 0, 0, 1],
+    [1, 0, 0, 1],
+    [1, 0, 0, 1],
+    [1, 0, 0, 1],
+    [1, 0, 0, 1],
+    [0, 1, 1, 0],
+  ],
+  ' ': [
+    [0],
+    [0],
+    [0],
+    [0],
+    [0],
+    [0],
+    [0],
+  ]
+};
+
 function triggerHeartBurst() {
   if (prefersReducedMotion) return;
-  const emojis = ['❤️', '💕', '💗', '✨', '💖', '🌸', '💫', '🥰'];
-  const count = 30;
 
-  for (let i = 0; i < count; i++) {
-    const particle = document.createElement('div');
-    particle.className = 'burst-particle';
-    particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  // Phase 1: Big heart appears
+  const bigHeart = document.createElement('div');
+  bigHeart.className = 'big-heart-center';
+  bigHeart.textContent = '❤️';
+  heartBurst.appendChild(bigHeart);
 
-    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
-    const distance = 100 + Math.random() * 200;
-    const tx = Math.cos(angle) * distance;
-    const ty = Math.sin(angle) * distance;
-    const scale = 0.5 + Math.random() * 1;
-    const rot = (Math.random() - 0.5) * 720;
+  // Phase 2: After big heart pulses, explode it
+  setTimeout(() => {
+    bigHeart.classList.add('explode');
 
-    particle.style.cssText = `
-      --tx:${tx}px; --ty:${ty}px; --scale:${scale}; --rot:${rot}deg;
-      left:50%; top:50%;
-      font-size:${0.8 + Math.random() * 1.2}rem;
-      animation: burstOut ${1.5 + Math.random()}s ease-out forwards;
-      animation-delay: ${Math.random() * 0.3}s;
-    `;
+    // Create explosion particles
+    const emojis = ['❤️', '💕', '💗', '✨', '💖', '🌸', '💫'];
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement('div');
+      p.className = 'burst-particle';
+      p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      const angle = (Math.PI * 2 * i) / 40 + (Math.random() - 0.5) * 0.4;
+      const dist = 80 + Math.random() * 250;
+      p.style.cssText = `
+        --tx:${Math.cos(angle) * dist}px;
+        --ty:${Math.sin(angle) * dist}px;
+        --scale:${0.4 + Math.random() * 0.8};
+        --rot:${(Math.random() - 0.5) * 720}deg;
+        left:50%; top:50%;
+        font-size:${0.6 + Math.random() * 1}rem;
+        animation: burstOut ${1.2 + Math.random() * 0.8}s ease-out forwards;
+        animation-delay: ${Math.random() * 0.2}s;
+      `;
+      heartBurst.appendChild(p);
+      setTimeout(() => p.remove(), 3000);
+    }
 
-    heartBurst.appendChild(particle);
-    setTimeout(() => particle.remove(), 3000);
+    // Phase 3: After explosion, spawn "I LOVE U" hearts
+    setTimeout(() => {
+      bigHeart.remove();
+      spawnILoveU();
+    }, 800);
+  }, 1800);
+}
+
+function spawnILoveU() {
+  const text = "I LOVE U";
+  const cellSize = Math.min(window.innerWidth / 40, 16); // responsive cell size
+  const gap = cellSize * 0.3;
+
+  // Calculate total width of all letters
+  let totalCols = 0;
+  for (const ch of text) {
+    const map = LETTER_MAPS[ch];
+    if (map) totalCols += map[0].length + 1; // +1 for spacing between letters
   }
+  totalCols -= 1; // remove trailing space
+
+  const startX = (window.innerWidth - totalCols * (cellSize + gap)) / 2;
+  const startY = (window.innerHeight - 7 * (cellSize + gap)) / 2;
+
+  let colOffset = 0;
+  const hearts = [];
+  const heartEmojis = ['❤️', '💗', '💖', '💕', '♥️'];
+
+  for (const ch of text) {
+    const map = LETTER_MAPS[ch];
+    if (!map) continue;
+
+    for (let row = 0; row < map.length; row++) {
+      for (let col = 0; col < map[row].length; col++) {
+        if (map[row][col] === 1) {
+          const targetX = startX + (colOffset + col) * (cellSize + gap);
+          const targetY = startY + row * (cellSize + gap);
+
+          // Create heart particle
+          const h = document.createElement('div');
+          h.className = 'iloveu-heart';
+          h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+
+          // Start from random position around center
+          const fromX = window.innerWidth / 2 + (Math.random() - 0.5) * 300;
+          const fromY = window.innerHeight / 2 + (Math.random() - 0.5) * 300;
+
+          h.style.cssText = `
+            left: ${fromX}px;
+            top: ${fromY}px;
+            font-size: ${cellSize}px;
+            --target-x: ${targetX}px;
+            --target-y: ${targetY}px;
+            animation-delay: ${0.3 + Math.random() * 1.2}s;
+          `;
+
+          heartBurst.appendChild(h);
+          hearts.push(h);
+        }
+      }
+    }
+    colOffset += map[0].length + 1;
+  }
+
+  // Add a gentle glow text behind the hearts
+  setTimeout(() => {
+    const glowText = document.createElement('div');
+    glowText.className = 'iloveu-glow-text';
+    glowText.textContent = 'I LOVE U';
+    heartBurst.appendChild(glowText);
+
+    // Add sparkle rain
+    for (let i = 0; i < 20; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'finale-sparkle';
+      sparkle.textContent = '✨';
+      sparkle.style.cssText = `
+        left: ${Math.random() * 100}%;
+        animation-delay: ${Math.random() * 3}s;
+        font-size: ${0.5 + Math.random() * 0.8}rem;
+      `;
+      heartBurst.appendChild(sparkle);
+    }
+  }, 2500);
 }
 
 /* ═══════════════════════════════════════════════════════
