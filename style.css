@@ -815,8 +815,9 @@ body {
 #letter-scene {
   background: radial-gradient(ellipse at 50% 30%, rgba(201, 169, 110, 0.08), transparent 50%),
     linear-gradient(170deg, #2D1216 0%, var(--wine-dark) 40%, #1A0A0D 100%);
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   overflow-y: auto;
   padding: 2rem 1rem;
   -webkit-overflow-scrolling: touch;
@@ -898,35 +899,61 @@ body {
   }
 }
 
-/* Sound Toggle */
-.sound-toggle {
+/* Music Controls Group */
+.music-controls {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(201, 169, 110, 0.3);
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(201, 169, 110, 0.25);
   background: rgba(253, 245, 230, 0.08);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 100;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  animation: controlsSlideIn .6s var(--transition-smooth) forwards;
+  opacity: 0;
+}
+
+@keyframes controlsSlideIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.music-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  background: rgba(253, 245, 230, 0.06);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  z-index: 100;
-  transition: transform .2s, background .3s;
+  font-size: 1.1rem;
+  transition: transform .2s, background .3s, border-color .3s;
+  color: var(--gold-light);
+  padding: 0;
 }
 
-.sound-toggle:hover {
-  transform: scale(1.1);
+.music-btn:hover {
+  transform: scale(1.12);
   background: rgba(253, 245, 230, 0.15);
   border-color: var(--gold);
 }
 
+.music-btn:active {
+  transform: scale(0.95);
+}
+
 .sound-icon {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1280,6 +1307,9 @@ body {
 /* Folding animation: letter shrinks and flattens */
 .letter-container.folding {
   animation: letterFold 1.5s var(--transition-smooth) forwards;
+  transform-origin: center center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @keyframes letterFold {
@@ -1306,6 +1336,23 @@ body {
   transition: max-height 1.5s var(--transition-smooth);
 }
 
+@keyframes letterUnfold {
+  0% {
+    transform: perspective(600px) rotateX(0deg) scale(0.75);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: perspective(800px) rotateX(-2deg) scale(0.9);
+    opacity: 1;
+  }
+
+  100% {
+    transform: perspective(1000px) rotateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
 .letter-container.folding .letter-paper::after {
   content: '';
   position: absolute;
@@ -1316,6 +1363,60 @@ body {
   background: linear-gradient(to top, var(--cream-dark) 0%, transparent 100%);
   z-index: 5;
   pointer-events: none;
+}
+
+/* ── Post-fold Navigation ── */
+.post-fold-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .8s ease, transform .8s var(--transition-smooth);
+  position: relative;
+  z-index: 25;
+}
+
+.post-fold-nav.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fold-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(201, 169, 110, 0.3);
+  background: rgba(253, 245, 230, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--gold-light);
+  font-family: var(--font-hand);
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all .3s var(--transition-smooth);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  min-width: 200px;
+  justify-content: center;
+}
+
+.fold-nav-btn:hover {
+  transform: scale(1.05);
+  background: rgba(253, 245, 230, 0.15);
+  border-color: var(--gold);
+  box-shadow: 0 6px 30px rgba(201, 169, 110, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.fold-nav-btn:active {
+  transform: scale(0.97);
+}
+
+.fold-nav-btn .btn-icon {
+  font-size: 1.2rem;
 }
 
 /* ── Keepsake Stamp ── */
@@ -1485,6 +1586,206 @@ body {
   }
 }
 
+/* ═══ TOUCH HEARTS ═══ */
+.touch-hearts-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 90;
+  overflow: hidden;
+}
+
+.touch-heart {
+  position: fixed;
+  pointer-events: none;
+  animation: touchHeartFloat 1.5s var(--transition-smooth) forwards;
+  opacity: 0;
+  z-index: 90;
+  filter: drop-shadow(0 0 4px rgba(192, 57, 43, 0.3));
+}
+
+@keyframes touchHeartFloat {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(0.3) rotate(0deg);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translate(calc(var(--tx) * 0.3), calc(var(--ty) * 0.3)) scale(1.2) rotate(15deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0.5) rotate(-10deg);
+  }
+}
+
+/* ═══ SCRATCH CARD ═══ */
+.scratch-card-section {
+  width: 100%;
+  max-width: 640px;
+  margin: 2rem auto 0;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .8s ease, transform .8s var(--transition-smooth);
+  pointer-events: none;
+  position: relative;
+  z-index: 10;
+}
+
+.scratch-card-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.scratch-hint {
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
+  color: var(--gold-light);
+  margin-bottom: 1rem;
+  animation: hintGlow 2s ease-in-out infinite;
+}
+
+@keyframes hintGlow {
+
+  0%,
+  100% {
+    text-shadow: 0 0 8px rgba(201, 169, 110, 0.3);
+  }
+
+  50% {
+    text-shadow: 0 0 20px rgba(201, 169, 110, 0.6), 0 0 40px rgba(201, 169, 110, 0.2);
+  }
+}
+
+.scratch-card-wrapper {
+  position: relative;
+  width: 340px;
+  height: 420px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(201, 169, 110, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(201, 169, 110, 0.2);
+}
+
+#scratch-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  z-index: 2;
+  border-radius: 14px;
+}
+
+#scratch-canvas:active {
+  cursor: grabbing;
+}
+
+.scratch-reveal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--cream) 0%, #FFF8EE 50%, var(--cream-dark) 100%);
+  border-radius: 14px;
+  z-index: 1;
+}
+
+.reveal-content {
+  padding: 1.5rem;
+  text-align: center;
+  opacity: 0.3;
+  transition: opacity .8s ease;
+}
+
+.scratch-reveal.revealed .reveal-content {
+  opacity: 1;
+}
+
+.reveal-hearts {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  animation: revealPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes revealPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.reveal-title {
+  font-family: var(--font-cursive);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--wine);
+  margin-bottom: 0.3rem;
+  text-shadow: 0 0 20px rgba(114, 47, 55, 0.2);
+}
+
+.reveal-divider {
+  font-size: 0.85rem;
+  color: var(--gold);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.2em;
+}
+
+.reveal-letter {
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-dark);
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.reveal-letter em {
+  color: var(--wine);
+  font-weight: 600;
+}
+
+.reveal-signature {
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--wine);
+  text-align: right;
+  margin-top: 0.5rem;
+}
+
+.scratch-reveal.revealed {
+  animation: revealGlow 2s ease-in-out;
+}
+
+@keyframes revealGlow {
+  0% {
+    box-shadow: inset 0 0 0 rgba(201, 169, 110, 0);
+  }
+
+  50% {
+    box-shadow: inset 0 0 40px rgba(201, 169, 110, 0.3), 0 0 60px rgba(201, 169, 110, 0.2);
+  }
+
+  100% {
+    box-shadow: inset 0 0 0 rgba(201, 169, 110, 0);
+  }
+}
+
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:480px) {
   .password-title {
@@ -1550,6 +1851,37 @@ body {
 
   .envelope-hint {
     font-size: 1.1rem;
+  }
+
+  .scratch-card-wrapper {
+    width: 290px;
+    height: 380px;
+  }
+
+  #scratch-canvas {
+    width: 290px;
+    height: 380px;
+  }
+
+  .reveal-title {
+    font-size: 1.5rem;
+  }
+
+  .reveal-letter {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .music-controls {
+    bottom: 16px;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .music-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 0.95rem;
   }
 }
 

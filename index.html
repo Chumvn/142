@@ -111,10 +111,15 @@
     <!-- Vignette glow around letter -->
     <div class="vignette-glow" aria-hidden="true"></div>
 
-    <!-- Sound toggle -->
-    <button id="sound-toggle" class="sound-toggle" aria-label="Bật/tắt nhạc" title="Bật/tắt nhạc">
-      <span class="sound-icon">🔊</span>
-    </button>
+    <!-- Music Controls -->
+    <div class="music-controls" id="music-controls">
+      <button id="sound-toggle" class="music-btn" aria-label="Bật/tắt nhạc" title="Bật/tắt nhạc">
+        <span class="sound-icon">🔊</span>
+      </button>
+      <button id="music-next" class="music-btn" aria-label="Bài tiếp theo" title="Bài tiếp theo">
+        <span>⏭️</span>
+      </button>
+    </div>
 
     <div class="letter-container" id="letter-container">
       <div class="letter-paper" id="letter-paper">
@@ -132,15 +137,23 @@
       </div>
     </div>
 
+    <!-- Post-fold Navigation (appears after stamp) -->
+    <div class="post-fold-nav" id="post-fold-nav">
+      <button class="fold-nav-btn" id="btn-reread">
+        <span class="btn-icon">📖</span> Đọc lại thư
+      </button>
+    </div>
+
     <!-- Heart burst container (appears after letter finishes) -->
     <div class="heart-burst-container" id="heart-burst" aria-hidden="true"></div>
+
+    <!-- Touch hearts container -->
+    <div class="touch-hearts-layer" id="touch-hearts-layer" aria-hidden="true"></div>
   </section>
 
 
   <!-- Background Music -->
-  <audio id="bg-music" preload="auto" loop>
-    <source src="assets/music.mp3" type="audio/mpeg" />
-  </audio>
+  <audio id="bg-music" preload="auto"></audio>
 
   <script src="app.js"></script>
 </body>
