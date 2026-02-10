@@ -59,29 +59,35 @@
   </section>
 
   <!-- ══════════════════════════════════════════════
-       SCREEN 2 — ENVELOPE (Redesigned 3D)
+       SCREEN 2 — ENVELOPE (Premium 3D)
        ══════════════════════════════════════════════ -->
   <section id="envelope-scene" class="screen">
+    <!-- Floating sparkles background -->
+    <div class="envelope-sparkles" aria-hidden="true"></div>
+
     <div class="envelope-wrapper">
       <p class="envelope-hint">Nhấn vào phong bì để mở ❤️</p>
+
       <div id="envelope" class="envelope" role="button" tabindex="0" aria-label="Mở phong bì">
-        <!-- Back of envelope -->
-        <div class="env-back"></div>
-        <!-- Letter inside -->
-        <div class="env-letter" id="env-letter">
-          <span class="env-letter-text">Gửi Thanh Thảo ❤️</span>
-          <div class="env-letter-lines">
-            <span></span><span></span><span></span>
+        <!-- Shadow beneath envelope -->
+        <div class="envelope-shadow"></div>
+
+        <!-- Letter inside (slides up when opened) -->
+        <div class="envelope-letter" id="envelope-letter">
+          <span class="envelope-letter-text">Gửi Thanh Thảo ❤️</span>
+          <div class="envelope-letter-lines">
+            <span></span><span></span><span></span><span></span>
           </div>
         </div>
-        <!-- Left fold -->
-        <div class="env-fold-left"></div>
-        <!-- Right fold -->
-        <div class="env-fold-right"></div>
-        <!-- Bottom flap -->
-        <div class="env-flap-bottom"></div>
-        <!-- Top flap (opens) -->
-        <div class="env-flap-top" id="env-flap-top">
+
+        <!-- Envelope body (front face) -->
+        <div class="envelope-body">
+          <!-- Inner V decoration -->
+          <div class="envelope-inner-v"></div>
+        </div>
+
+        <!-- Top flap (the triangular lid that opens) -->
+        <div class="envelope-flap" id="envelope-flap">
           <!-- Wax seal on the flap -->
           <div class="wax-seal" id="wax-seal">
             <div class="wax-seal-inner">❤</div>
